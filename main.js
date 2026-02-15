@@ -135,9 +135,9 @@ function formateDate(date = '') {
 }
 
 
-function getPageName() {
-    return window.location.href.match(/\w+.html/g)[0].replace('.html', '');
-}
+// function getPageName() {
+//     return window.location.href.match(/\w+.html/g)[0].replace('.html', '');
+// }
 
 function renderAccountInfo(account) {
     const balance = document.getElementById('total');
@@ -171,7 +171,7 @@ function clearInputs(inputs) {
 
 function main() {
 
-    const page =  'home';
+    const page = 'home';
     const account = new Account(page);
 
     const transactionsSection = document.querySelector('section.transactions');
