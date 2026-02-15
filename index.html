@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"> <!-- Switch to 'light' for light theme -->
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Tracker</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body class="flex flex-col lg:flex-row min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-full lg:w-64 p-4 lg:p-6 shadow-lg" style="background-color: var(--bg-charcoal); color: var(--accent-emerald);">
+
+        <div class="flex justify-between items-center lg:block">
+            <div class="text-xl lg:text-2xl font-bold mb-0 lg:mb-8" style="color: var(--accent-lime);">
+                💰 E_Money
+            </div>
+        </div>
+
+        <ul class="flex gap-3 lg:block lg:space-y-4 mt-4 lg:mt-0 text-sm lg:text-base">
+            <li class="cursor-pointer p-2 rounded hover:bg-[var(--bg-darkgray)]">Overview</li>
+            <li class="cursor-pointer p-2 rounded hover:bg-[var(--bg-darkgray)]">Monthly</li>
+            <li class="cursor-pointer font-semibold p-2">+ Account</li>
+        </ul>
+    </aside>
+
+
+    <!-- Account Info -->
+    <section class="account-info flex-grow p-4 sm:p-6 lg:p-8"
+        style="background-color: var(--bg-darkgray); color: var(--text-primary);">
+
+        <p id="date" class="text-right mb-2" style="color: var(--text-secondary);"></p>
+        <h2 id="account-name" class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
+            Home
+        </h2>
+        <div class="text-xl mb-6" style="color: var(--accent-lime);">Total:
+            <span id="total"></span> EGP
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6 mb-6">
+            <div class="p-6 rounded-lg shadow text-lg font-semibold"
+                style="background-color: var(--income); color: var(--bg-deep);">
+                Income: <span id="income"></span> EGP
+            </div>
+            <div class="p-6 rounded-lg shadow text-lg font-semibold"
+                style="background-color: var(--expense); color: var(--bg-deep);">
+                Expenses: <span id="expenses"></span> EGP
+            </div>
+        </div>
+
+        <!-- Transactions -->
+        <h2 id="empty-transactions-warning" class="text-center font-bold text-base sm:text-lg">No Transactions Found</h2>
+            <section class="transactions overflow-x-auto">
+                <h2 class="text-xl font-semibold underline mb-4" style="color: var(--accent-emerald);">Transactions</h2>
+                <table id="transactions-table" class="w-full border-collapse shadow-lg">
+                    <thead style="background-color: var(--bg-charcoal); color: var(--accent-lime);">
+                        <tr>
+                            <th class="sm:p-3 p-3 text-left">Type</th>
+                            <th class="sm:p-3 p-3 text-left">Amount</th>
+                            <th class="sm:p-3 p-3 text-left">Category</th>
+                            <th class="sm:p-3 p-3 text-left">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions"></tbody>
+                </table>
+            </section>
+    </section>
+
+    <!-- Floating Add Transaction Button -->
+    <button id="add-transaction-btn"
+        class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6
+        rounded-full w-12 h-12 sm:w-14 sm:h-14 text-xl sm:text-2xl shadow-lg hover:bg-[var(--accent-brightgreen)] cursor-pointer text-center">
+        +
+    </button>
+
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="fixed inset-0 hidden bg-black/70 flex items-center justify-center p-4">
+        <div class="bg-[var(--bg-white)]
+            rounded-lg shadow-lg
+            w-full max-w-md
+            p-4 sm:p-6">
+            <h2 class="text-xl font-bold mb-4 text-[var(--accent-emerald)]">Add Transaction</h2>
+
+            <form id="transaction-form" class="space-y-4">
+                <div>
+                    <label class="block text-[var(--text-secondary)]">Type</label>
+                    <select id="transaction-type" class="w-full border rounded p-2">
+                        <option class="sm:text-sm">Income</option>
+                        <option class="sm:text-sm">Expense</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[var(--text-secondary)]">Amount</label>
+                    <input id="amount" type="number" class="w-full border rounded p-2 text-sm sm:text-base"
+                        placeholder="e.g. 200">
+                </div>
+                <div>
+                    <label class="block text-[var(--text-secondary)]">Category</label>
+                    <input id="category" type="text" class="w-full border rounded p-2 text-sm sm:text-base"
+                        placeholder="e.g. Food">
+                </div>
+                <div>
+                    <label class="block text-[var(--text-secondary)]">Date</label>
+                    <input id="date-input" type="date" class="w-full border rounded p-2 text-sm sm:text-base">
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="close-modal"
+                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    <button type="submit" id="add-btn"
+                        class="px-4 py-2 bg-[var(--accent-emerald)] text-white rounded hover:bg-[var(--accent-lime)]">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="./main.js"></script>
+
+</html>
