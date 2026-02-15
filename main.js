@@ -171,7 +171,7 @@ function clearInputs(inputs) {
 
 function main() {
 
-    const page = getPageName() === 'index' ? 'home' : getPageName();
+    const page =  'home';
     const account = new Account(page);
 
     const transactionsSection = document.querySelector('section.transactions');
