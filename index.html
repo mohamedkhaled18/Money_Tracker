@@ -36,7 +36,7 @@
 
         <p id="date" class="text-right mb-2" style="color: var(--text-secondary);"></p>
         <h2 id="account-name" class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">
-            Home
+            🏠 Home
         </h2>
         <div class="text-xl mb-6" style="color: var(--accent-lime);">Total:
             <span id="total"></span> EGP
@@ -57,7 +57,7 @@
         <!-- Transactions -->
         <h2 id="empty-transactions-warning" class="text-center font-bold text-base sm:text-lg">No Transactions Found
         </h2>
-        <section class="transactions overflow-x-auto">
+        <section class="transactions max-h-[340px] overflow-y-hidden overflow-x-auto">
             <h2 class="text-xl font-semibold underline mb-4" style="color: var(--accent-emerald);">Transactions</h2>
             <table id="transactions-table" class="w-full border-collapse shadow-lg">
                 <thead style="background-color: var(--bg-charcoal); color: var(--accent-lime);">
@@ -68,60 +68,52 @@
                         <th class="sm:p-3 p-3 text-left">Date</th>
                     </tr>
                 </thead>
-                <tbody id="transactions"></tbody>
+                <tbody id="transactions"  class="overflow-x-scroll"></tbody>
             </table>
         </section>
     </section>
 
     <!-- Floating Add Transaction Button -->
     <button onclick="" id="add-transaction-btn"
-        class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6
+        class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-[var(--accent-lime)] text-white text-[2rem] font-bold
         rounded-full w-12 h-12 sm:w-14 sm:h-14 text-xl sm:text-2xl shadow-lg hover:bg-[var(--accent-brightgreen)] cursor-pointer text-center">
         +
     </button>
 
+
     <!-- Transaction Modal -->
     <div id="transaction-modal" class="fixed inset-0 hidden bg-black/70 flex items-center justify-center p-4">
-        <div class="bg-[var(--bg-white)]
-            rounded-lg shadow-lg
-            w-full max-w-md
-            p-4 sm:p-6">
+        <div class="bg-[var(--bg-white)] rounded-lg shadow-lg w-full max-w-md p-4 sm:p-6">
             <h2 class="text-xl font-bold mb-4 text-[var(--accent-emerald)]">Add Transaction</h2>
-
             <form id="transaction-form" class="space-y-4">
                 <div>
-                    <label class="block text-[var(--text-secondary)]">Type</label>
+                    <label class="block text-[var(--text-secondary)]">Transaction Type</label>
                     <select id="transaction-type" class="w-full border rounded p-2">
-                        <option class="sm:text-sm">Income</option>
-                        <option class="sm:text-sm">Expense</option>
+                        <option value="Income" class="sm:text-sm">Income</option>
+                        <option value="Expense" class="sm:text-sm">Expense</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-[var(--text-secondary)]">Amount</label>
-                    <input id="amount" type="number" class="w-full border rounded p-2 text-sm sm:text-base"
-                        placeholder="e.g. 200">
+                    <input id="amount" type="number" class="w-full border rounded p-2 text-sm sm:text-base" placeholder="e.g. 200">
                 </div>
                 <div>
                     <label class="block text-[var(--text-secondary)]">Category</label>
-                    <input id="category" type="text" class="w-full border rounded p-2 text-sm sm:text-base"
-                        placeholder="e.g. Food">
+                    <input id="category" type="text" class="w-full border rounded p-2 text-sm sm:text-base" placeholder="e.g. Food">
                 </div>
                 <div>
                     <label class="block text-[var(--text-secondary)]">Date</label>
                     <input id="date-input" type="date" class="w-full border rounded p-2 text-sm sm:text-base">
                 </div>
-
-                <!-- Buttons -->
                 <div class="flex justify-end space-x-2">
-                    <button type="button" id="close-modal"
-                        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-                    <button type="submit" id="add-btn"
-                        class="px-4 py-2 bg-[var(--accent-emerald)] text-white rounded hover:bg-[var(--accent-lime)]">Add</button>
+                    <button type="button" id="close-modal" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    <button type="submit" id="add-btn" class="px-4 py-2 bg-[var(--accent-emerald)] text-white rounded hover:bg-[var(--accent-lime)]">Add</button>
                 </div>
             </form>
         </div>
     </div>
 
+    
     <!-- Account Modal (preview, same formatting as Transaction Modal) -->
     <div id="account-modal" class="fixed inset-0 hidden bg-black/70 flex items-center justify-center p-4">
         <div class="bg-[var(--bg-white)]

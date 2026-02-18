@@ -75,6 +75,7 @@ class Account {
     deleteTransaction(id) {
         let currentTransactions = this.getTransactions().filter(tx => tx.id != id);
         Storage.set(this.name, currentTransactions);
+        is_empty_transactions(this);
     }
 
     editTransaction(id, newData) {
@@ -116,15 +117,15 @@ class Transaction {
     toHTML() {
         return `
             <tr id=${this.id}>
-                <td class="sm:p-3 type p-3">${this.type}</td>
-                <td class="sm:p-3 p-3 text-[var(--${this.type})]">${this.type === 'expense' ? '-' : '+'} ${this.amount} EGP</td>
-                <td class="sm:p-3 p-3">${this.category}</td>
-                <td class="sm:p-3 p-3">${this.date}</td>
+            <td class="type p-3">${this.type}</td>
+            <td class="p-3 text-[var(--${this.type})]">${this.type === 'expense' ? '-' : '+'} ${this.amount} EGP</td>
+            <td class="p-3">${this.category}</td>
+            <td class="p-3">${this.date}</td>
                 <td>
-                    <button class='edit-btn'>📝</button>
+                    <button class='edit-btn px-3'>📝</button>
                 </td>
                 <td>
-                    <button class='delete-btn'>❌</button>
+                    <button class='delete-btn px-3'>❌</button>
                 </td>
             </tr>
         `;
@@ -142,7 +143,7 @@ function renderAccountInfo(account) {
     expenses.innerText = account.getTotalExpenses();
 }
 
-function renderTransactions(transactionsTable, transactions) {
+function renderTransactions(transactionsTable,transactions) {
     transactionsTable.innerHTML = '';
     transactions.forEach(transaction => {
         const t = new Transaction(
@@ -157,7 +158,7 @@ function renderTransactions(transactionsTable, transactions) {
 }
 
 
-function is_empty_transactions(transactionsTable, account) {
+function is_empty_transactions(account) {
 
     renderAccountInfo(account);
     if (account.getTransactions().length === 0) {
@@ -168,7 +169,7 @@ function is_empty_transactions(transactionsTable, account) {
 
     document.getElementById('empty-transactions-warning').classList.add('hidden');
     document.querySelector('section.transactions').classList.remove('hidden');
-    renderTransactions(transactionsTable, account.getTransactions());
+    renderTransactions(document.querySelector('tbody#transactions'),account.getTransactions());
 }
 
 
@@ -192,7 +193,7 @@ function main() {
     const inputs = [typeSelect, ...form.querySelectorAll('input')];
 
 
-    is_empty_transactions(transactionsTable, account);
+    is_empty_transactions(account);
 
 
     form.addEventListener('submit', (e) => {
@@ -210,16 +211,15 @@ function main() {
 
         account.addTransaction(tx);
         modal.classList.add('hidden');
+        is_empty_transactions(account);
         clearInputs(inputs);
-        renderAccountInfo(account)
-        renderTransactions(transactionsTable, account.getTransactions())
     });
 
 
     window.addEventListener('storage', (e) => {
         if (e.key === account.name) {
             renderAccountInfo(account);
-            renderTransactions(transactionsTable, account.getTransactions());
+            renderTransactions(transactionsTable,account.getTransactions());
         }
     });
 
@@ -234,7 +234,7 @@ function main() {
         if (e.target.classList.contains('delete-btn')) {
             account.deleteTransaction(row.id);
             renderAccountInfo(account);
-            renderTransactions(transactionsTable, account.getTransactions());
+            renderTransactions(transactionsTable,account.getTransactions());
         }
 
         if (e.target.classList.contains('edit-btn')) {

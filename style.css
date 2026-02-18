@@ -68,6 +68,18 @@ main > aside {
     text-transform: capitalize;
 }
 
+#transactions-table {
+    width: 100%;
+    table-layout: auto;
+}
+
+#transactions-table th, #transactions-table td {
+    padding: 0.75rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* @media (prefers-color-scheme: dark) {
     body {
         background: #000;
