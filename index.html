@@ -12,7 +12,8 @@
 <body class="flex flex-col lg:flex-row min-h-screen">
 
     <!-- Sidebar -->
-    <aside class="w-full lg:w-64 p-4 lg:p-6 shadow-lg" style="background-color: var(--bg-charcoal); color: var(--accent-emerald);">
+    <aside class="w-full lg:w-64 p-4 lg:p-6 shadow-lg"
+        style="background-color: var(--bg-charcoal); color: var(--accent-emerald);">
 
         <div class="flex justify-between items-center lg:block">
             <div class="text-xl lg:text-2xl font-bold mb-0 lg:mb-8" style="color: var(--accent-lime);">
@@ -23,7 +24,8 @@
         <ul class="flex gap-3 lg:block lg:space-y-4 mt-4 lg:mt-0 text-sm lg:text-base">
             <li class="cursor-pointer p-2 rounded hover:bg-[var(--bg-darkgray)]">Overview</li>
             <li class="cursor-pointer p-2 rounded hover:bg-[var(--bg-darkgray)]">Monthly</li>
-            <li class="cursor-pointer font-semibold p-2">+ Account</li>
+            <li class="active cursor-pointer p-2 rounded hover:bg-[var(--bg-darkgray)]">🏠 Home</li>
+            <li id="add-account-btn" class="cursor-pointer font-semibold p-2">+ Account</li>
         </ul>
     </aside>
 
@@ -53,25 +55,26 @@
         </div>
 
         <!-- Transactions -->
-        <h2 id="empty-transactions-warning" class="text-center font-bold text-base sm:text-lg">No Transactions Found</h2>
-            <section class="transactions overflow-x-auto">
-                <h2 class="text-xl font-semibold underline mb-4" style="color: var(--accent-emerald);">Transactions</h2>
-                <table id="transactions-table" class="w-full border-collapse shadow-lg">
-                    <thead style="background-color: var(--bg-charcoal); color: var(--accent-lime);">
-                        <tr>
-                            <th class="sm:p-3 p-3 text-left">Type</th>
-                            <th class="sm:p-3 p-3 text-left">Amount</th>
-                            <th class="sm:p-3 p-3 text-left">Category</th>
-                            <th class="sm:p-3 p-3 text-left">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactions"></tbody>
-                </table>
-            </section>
+        <h2 id="empty-transactions-warning" class="text-center font-bold text-base sm:text-lg">No Transactions Found
+        </h2>
+        <section class="transactions overflow-x-auto">
+            <h2 class="text-xl font-semibold underline mb-4" style="color: var(--accent-emerald);">Transactions</h2>
+            <table id="transactions-table" class="w-full border-collapse shadow-lg">
+                <thead style="background-color: var(--bg-charcoal); color: var(--accent-lime);">
+                    <tr>
+                        <th class="sm:p-3 p-3 text-left">Type</th>
+                        <th class="sm:p-3 p-3 text-left">Amount</th>
+                        <th class="sm:p-3 p-3 text-left">Category</th>
+                        <th class="sm:p-3 p-3 text-left">Date</th>
+                    </tr>
+                </thead>
+                <tbody id="transactions"></tbody>
+            </table>
+        </section>
     </section>
 
     <!-- Floating Add Transaction Button -->
-    <button id="add-transaction-btn"
+    <button onclick="" id="add-transaction-btn"
         class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6
         rounded-full w-12 h-12 sm:w-14 sm:h-14 text-xl sm:text-2xl shadow-lg hover:bg-[var(--accent-brightgreen)] cursor-pointer text-center">
         +
@@ -118,7 +121,64 @@
             </form>
         </div>
     </div>
+
+    <!-- Account Modal (preview, same formatting as Transaction Modal) -->
+    <div id="account-modal" class="fixed inset-0 hidden bg-black/70 flex items-center justify-center p-4">
+        <div class="bg-[var(--bg-white)]
+            rounded-lg shadow-lg
+            w-full max-w-md
+            p-4 sm:p-6">
+            <h2 class="text-xl font-bold mb-4 text-[var(--accent-emerald)]">Add Account</h2>
+
+            <form id="account-form" class="space-y-4">
+                <div>
+                    <label class="block text-[var(--text-secondary)]">Account Name</label>
+                    <input id="account-name" type="text" class="w-full border rounded p-2 text-sm sm:text-base" placeholder="e.g. Savings">
+                </div>
+                <div>
+                    <label class="block text-[var(--text-secondary)]">Initial Balance</label>
+                    <input id="initial-balance" type="number" class="w-full border rounded p-2 text-sm sm:text-base" placeholder="e.g. 1000">
+                </div>
+
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="close-account-modal" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                    <button type="button" id="create-account-btn" class="px-4 py-2 bg-[var(--accent-emerald)] text-white rounded hover:bg-[var(--accent-lime)]">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
-<script src="./main.js"></script>
+<script type="module" src="./main.js"></script>
+<script type="module" src="./helpers.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+    const yValues = [55, 49, 44, 24, 15];
+    const barColors = ["red", "green", "blue", "orange", "brown"];
+
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: "World Wine Production 2018",
+                    font: { size: 16 }
+                }
+            }
+        }
+    });
+</script>
 
 </html>

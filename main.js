@@ -1,5 +1,6 @@
 // import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 // import * as gsap from 'https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js';
+// import * as Chart from 'https://cdn.jsdelivr.net/npm/chart.js'
 /*
 
 class Account {
@@ -38,6 +39,8 @@ class Account {
 }
 */
 
+import { validInputs, formateDate, clearInputs } from './helpers.js';
+
 // ***********
 // Modals
 // ***********
@@ -69,6 +72,16 @@ class Account {
         Storage.set(this.name, list);
     }
 
+    deleteTransaction(id) {
+        let currentTransactions = this.getTransactions().filter(tx => tx.id != id);
+        Storage.set(this.name, currentTransactions);
+    }
+
+    editTransaction(id, newData) {
+        const editedTx = this.getTransactions().find(transaction => transaction.id == id);
+
+    }
+
     getBalance() {
         return this.getTransactions().reduce((sum, t) => {
             return t.type === 'income'
@@ -93,7 +106,8 @@ class Account {
 }
 
 class Transaction {
-    constructor(type, amount, category, date) {
+    constructor(id, type, amount, category, date) {
+        this.id = id;
         this.type = type.toLowerCase();
         this.amount = amount;
         this.category = category;
@@ -101,11 +115,17 @@ class Transaction {
     }
     toHTML() {
         return `
-            <tr>
+            <tr id=${this.id}>
                 <td class="sm:p-3 type p-3">${this.type}</td>
                 <td class="sm:p-3 p-3 text-[var(--${this.type})]">${this.type === 'expense' ? '-' : '+'} ${this.amount} EGP</td>
                 <td class="sm:p-3 p-3">${this.category}</td>
                 <td class="sm:p-3 p-3">${this.date}</td>
+                <td>
+                    <button class='edit-btn'>📝</button>
+                </td>
+                <td>
+                    <button class='delete-btn'>❌</button>
+                </td>
             </tr>
         `;
     }
@@ -113,45 +133,20 @@ class Transaction {
 
 
 
-
-// ******************
-// Helper Functions
-// ******************
-
-function validInputs(inputs) {
-    let isSomeEmpty = inputs.some(input => input.value === '' && input.type != 'date');
-    let amount = inputs[1].value;
-    if (isSomeEmpty || amount <= 0)
-        return false;
-    return true;
-}
-
-function formateDate(date = '') {
-    let formatedDate = date === '' ? new Date() : new Date(date);
-    return formatedDate
-        .toString().split(" ")
-        .slice(0, 4)
-        .join(" ");
-}
-
-
-// function getPageName() {
-//     return window.location.href.match(/\w+.html/g)[0].replace('.html', '');
-// }
-
 function renderAccountInfo(account) {
     const balance = document.getElementById('total');
     const income = document.getElementById('income');
     const expenses = document.getElementById('expenses');
-    balance.innerText = account.getBalance() || 0;
-    income.innerText = account.getTotalIncome() || 0;
-    expenses.innerText = account.getTotalExpenses() || 0;
+    balance.innerText = account.getBalance();
+    income.innerText = account.getTotalIncome();
+    expenses.innerText = account.getTotalExpenses();
 }
 
 function renderTransactions(transactionsTable, transactions) {
     transactionsTable.innerHTML = '';
     transactions.forEach(transaction => {
         const t = new Transaction(
+            transaction.id,
             transaction.type,
             transaction.amount,
             transaction.category,
@@ -161,9 +156,21 @@ function renderTransactions(transactionsTable, transactions) {
     });
 }
 
-function clearInputs(inputs) {
-    inputs.forEach(input => input.value = '');
+
+function is_empty_transactions(transactionsTable, account) {
+
+    renderAccountInfo(account);
+    if (account.getTransactions().length === 0) {
+        document.getElementById('empty-transactions-warning').classList.remove('hidden');
+        document.querySelector('section.transactions').classList.add('hidden');
+        return;
+    }
+
+    document.getElementById('empty-transactions-warning').classList.add('hidden');
+    document.querySelector('section.transactions').classList.remove('hidden');
+    renderTransactions(transactionsTable, account.getTransactions());
 }
+
 
 // ***********
 // Main
@@ -174,7 +181,6 @@ function main() {
     const page = 'home';
     const account = new Account(page);
 
-    const transactionsSection = document.querySelector('section.transactions');
     const transactionsTable = document.querySelector('tbody#transactions');
 
     const modal = document.getElementById("transaction-modal");
@@ -185,9 +191,9 @@ function main() {
     const typeSelect = form.querySelector('#transaction-type');
     const inputs = [typeSelect, ...form.querySelectorAll('input')];
 
-    renderAccountInfo(account);
-    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-    openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+
+    is_empty_transactions(transactionsTable, account);
+
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -195,6 +201,7 @@ function main() {
         if (!validInputs(inputs)) return;
 
         const tx = new Transaction(
+            Number(new Date()),
             inputs[0].value,
             Number(inputs[1].value),
             inputs[2].value.trim(),
@@ -202,23 +209,55 @@ function main() {
         );
 
         account.addTransaction(tx);
-        renderTransactions(transactionsTable, account.getTransactions());
         modal.classList.add('hidden');
         clearInputs(inputs);
+        renderAccountInfo(account)
+        renderTransactions(transactionsTable, account.getTransactions())
     });
 
-    if (account.getTransactions().length === 0) {
-        document.getElementById('empty-transactions-warning').classList.remove('hidden');
-        transactionsSection.classList.add('hidden');
-        return;
-    }
 
-    document.getElementById('empty-transactions-warning').classList.add('hidden');
-    transactionsSection.classList.remove('hidden');
+    window.addEventListener('storage', (e) => {
+        if (e.key === account.name) {
+            renderAccountInfo(account);
+            renderTransactions(transactionsTable, account.getTransactions());
+        }
+    });
 
-    renderTransactions(transactionsTable, account.getTransactions());
+    // Buttons
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+
+    transactionsTable.addEventListener('click', (e) => {
+        const row = e.target.closest('tr');
+        if (!row) return;
+
+        if (e.target.classList.contains('delete-btn')) {
+            account.deleteTransaction(row.id);
+            renderAccountInfo(account);
+            renderTransactions(transactionsTable, account.getTransactions());
+        }
+
+        if (e.target.classList.contains('edit-btn')) {
+            modal.classList.remove('hidden');
+            // load row data into form here
+        }
+    });
 }
 
-main()
+document.addEventListener('DOMContentLoaded', main);
 
-// document.addEventListener('DOMContentLoaded', main);
+
+const accountOpenBtn = document.getElementById('add-account-btn');
+const accountModal = document.getElementById('account-modal');
+const accountCloseBtn = document.getElementById('close-account-modal');
+const createAccountBtn = document.getElementById('create-account-btn');
+
+if (accountOpenBtn && accountModal) {
+    accountOpenBtn.addEventListener('click', () => accountModal.classList.remove('hidden'));
+}
+if (accountCloseBtn) {
+    accountCloseBtn.addEventListener('click', () => accountModal.classList.add('hidden'));
+}
+if (createAccountBtn) {
+    createAccountBtn.addEventListener('click', () => accountModal.classList.add('hidden'));
+}
