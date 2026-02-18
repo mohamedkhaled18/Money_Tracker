@@ -246,7 +246,7 @@ function main() {
 
 document.addEventListener('DOMContentLoaded', main);
 
-
+/*
 const accountOpenBtn = document.getElementById('add-account-btn');
 const accountModal = document.getElementById('account-modal');
 const accountCloseBtn = document.getElementById('close-account-modal');
@@ -260,4 +260,4 @@ if (accountCloseBtn) {
 }
 if (createAccountBtn) {
     createAccountBtn.addEventListener('click', () => accountModal.classList.add('hidden'));
-}
+}*/
