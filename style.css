@@ -64,6 +64,10 @@ main > aside {
     --text-secondary: #424242;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 .type {
     text-transform: capitalize;
 }
