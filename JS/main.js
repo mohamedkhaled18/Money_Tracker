@@ -12,30 +12,28 @@ function main() {
     const transactionsTable = document.querySelector('tbody#transactions');
 
 
-    const typeSelect = form.querySelector('#transaction-type');
-    const inputs = [typeSelect, ...form.querySelectorAll('input')];
+    // const typeSelect = form.querySelector('#transaction-type');
+    // const inputs = [typeSelect, ...form.querySelectorAll('input')];
 
     is_empty_transactions(account);
+    // form.addEventListener('submit', (e) => {
+    //     e.preventDefault();
 
-    renderOverviewChart(account)
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
+    //     if (!validInputs(inputs)) return;
 
-        if (!validInputs(inputs)) return;
+    //     const tx = new Transaction(
+    //         Number(new Date()),
+    //         inputs[0].value,
+    //         Number(inputs[1].value),
+    //         inputs[2].value.trim(),
+    //         formateDate(inputs[3].value)
+    //     );
 
-        const tx = new Transaction(
-            Number(new Date()),
-            inputs[0].value,
-            Number(inputs[1].value),
-            inputs[2].value.trim(),
-            formateDate(inputs[3].value)
-        );
-
-        account.addTransaction(tx);
-        modal.classList.add('hidden');
-        is_empty_transactions(account);
-        clearInputs(inputs);
-    });
+    //     account.addTransaction(tx);
+    //     modal.classList.add('hidden');
+    //     is_empty_transactions(account);
+    //     clearInputs(inputs);
+    // });
 
 
     // Buttons
@@ -61,38 +59,3 @@ function main() {
 
 document.addEventListener('DOMContentLoaded', main);
 
-
-async function loadModal(componentName)
-{
-    const response = await fetch(`./Components/${componentName}.html`);
-    const modal = await response.text()
-    return modal
-}
-
-loadModal()
-
-
-function renderOverviewChart(account) {
-    const ctx = document.getElementById('overviewChart').getContext('2d');
-
-    const data = {
-        labels: ['Income', 'Expenses'],
-        datasets: [{
-            label: 'EGP',
-            data: [account.getTotalIncome(), account.getTotalExpenses()],
-            backgroundColor: ['#4CAF50', '#F44336']
-        }]
-    };
-
-    new Chart(ctx, {
-        type: 'pie', // or 'pie', 'line'
-        data: data,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: { display: true, text: 'Income vs Expenses' }
-            }
-        }
-    });
-}

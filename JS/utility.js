@@ -45,15 +45,15 @@ export function is_empty_transactions(account) {
     renderTransactions(document.querySelector('tbody#transactions'),account.getTransactions());
 }
 
-export async function loadModal(componentName)
-{
-    const response = await fetch(`./Components/${componentName}.html`);
-    const modalHTML = await response.text();
-    return modalHTML;
+export async function loadModal(componentName) {
+    try {    
+        const response = await fetch(`./Components/${componentName}.html`);
+        const modalHTML = await response.text();
+        return modalHTML;
+    }catch(e){
+        console.log(e);
+    }
 }
-
-
-
 
 export function renderAccountInfo(account) {
     const balance = document.getElementById('total');
