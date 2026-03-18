@@ -131,3 +131,7 @@ table {
 table .close {
     cursor: pointer;
 }
+#modals,
+#modals button {
+    font-size: 1.5rem;
+}

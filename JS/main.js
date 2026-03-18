@@ -146,10 +146,12 @@ function fillData() {
 fillData()
 
 transactionsBody.addEventListener('click', e => {
-    const id = e.target.closest('tr').id;
-    homeAccount.removeTransaction(id);
-    homeAccount.saveTransactions();
-    fillData()
+    if (e.target.classList.contains('close')) {
+        const id = e.target.closest('tr').id;
+        homeAccount.removeTransaction(id);
+        homeAccount.saveTransactions();
+        fillData()
+    }
 })
 
 
