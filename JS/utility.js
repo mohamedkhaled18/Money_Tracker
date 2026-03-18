@@ -2,11 +2,9 @@ import { Transaction } from './Classes/Transaction.js';
 
 
 export function validInputs(inputs) {
-    let isSomeEmpty = inputs.some(input => input.value === '' && input.type != 'date');
-    let amount = inputs[1].value;
-    if (isSomeEmpty || amount <= 0)
-        return false;
-    return true;
+    let isEmpty = inputs.some(input => input.value === '' && input.type !== 'date');
+    let isAmountBalanced = inputs.some(input => (input.type === 'number' && Number(input.value) > 0));
+    return (!isEmpty && isAmountBalanced);
 }
 
 export function formateDate(date = '') {
@@ -53,27 +51,4 @@ export async function loadModal(componentName) {
     }catch(e){
         console.log(e);
     }
-}
-
-export function renderAccountInfo(account) {
-    const balance = document.getElementById('total');
-    const income = document.getElementById('income');
-    const expenses = document.getElementById('expenses');
-    balance.innerText = account.getBalance();
-    income.innerText = account.getTotalIncome();
-    expenses.innerText = account.getTotalExpenses();
-}
-
-export function renderTransactions(transactionsTable,transactions) {
-    transactionsTable.innerHTML = '';
-    transactions.forEach(transaction => {
-        const t = new Transaction(
-            transaction.id,
-            transaction.type,
-            transaction.amount,
-            transaction.category,
-            transaction.date,
-        );
-        transactionsTable.insertAdjacentHTML('beforeend', t.toHTML());
-    });
 }

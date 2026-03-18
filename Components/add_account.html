@@ -1,5 +1,5 @@
 <!-- Add Account Modal -->
-<div class="fixed inset-0 flex items-center justify-center bg-black/70 bg-opacity-50 z-50 hidden" id="addAccountModal">
+<div class="fixed inset-0 flex items-center justify-center bg-black/70 bg-opacity-50 z-50" id="addAccountModal">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
 
         <!-- Header -->
@@ -34,9 +34,8 @@
 
         <!-- Footer -->
         <div class="flex justify-end space-x-2 border-t px-4 py-2">
-            <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                onclick="closeModal('addAccountModal')">Cancel</button>
-            <button type="submit" form="addAccountForm"
+            <button id="close_btn" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+            <button id="add_btn" form="addAccountForm"
                 class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Add Account</button>
         </div>
     </div>

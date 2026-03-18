@@ -1,0 +1,7 @@
+- When use case be abstract & not and should we clarify the details?
+لما Actor إضافي يقدر يعمل نفس العملية
+مش معناها إنه Primary Actor
+
+- How Workflow in use cases?
+
+- think in primary and secondary actors

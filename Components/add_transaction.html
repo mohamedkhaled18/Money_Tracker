@@ -1,33 +1,34 @@
 <!-- Transaction Modal -->
-<div id="transaction-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4">
+<div id="transaction-modal" class="modal fixed inset-0 bg-black/70 flex items-center justify-center p-4">
     <div class="bg-[var(--bg-white)] rounded-lg shadow-lg w-full max-w-md p-4 sm:p-6">
         <h2 class="text-xl font-bold mb-4 text-[var(--accent-emerald)]">Add Transaction</h2>
         <form id="transaction-form" class="space-y-4">
             <div>
                 <label class="block text-[var(--text-secondary)]">Transaction Type</label>
-                <select id="transaction-type" class="w-full border rounded p-2">
+                <select id="transaction-type" class="input w-full border rounded p-2">
                     <option value="Income" class="sm:text-sm">Income</option>
                     <option value="Expense" class="sm:text-sm">Expense</option>
                 </select>
             </div>
             <div>
                 <label class="block text-[var(--text-secondary)]">Amount</label>
-                <input id="amount" type="number" class="w-full border rounded p-2 text-sm sm:text-base"
+                <input id="amount" type="number" class="input w-full border rounded p-2 text-sm sm:text-base"
                     placeholder="e.g. 200">
             </div>
             <div>
                 <label class="block text-[var(--text-secondary)]">Category</label>
-                <input id="category" type="text" class="w-full border rounded p-2 text-sm sm:text-base"
+                <input id="category" type="text" class="input w-full border rounded p-2 text-sm sm:text-base"
                     placeholder="e.g. Food">
             </div>
             <div>
                 <label class="block text-[var(--text-secondary)]">Date</label>
-                <input id="date-input" type="date" class="w-full border rounded p-2 text-sm sm:text-base">
+                <input id="date" type="date" class="input w-full border rounded p-2 text-sm sm:text-base">
             </div>
+            <textarea id="notes" class="input"></textarea>
             <div class="flex justify-end space-x-2">
-                <button type="button" id="close-modal"
+                <button type="button" id="close_btn" type="button"
                     class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
-                <button type="submit" id="add-btn"
+                <button id="add_btn" type="submit"
                     class="px-4 py-2 bg-[var(--accent-emerald)] text-white rounded hover:bg-[var(--accent-lime)]">Add</button>
             </div>
         </form>
